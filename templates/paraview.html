@@ -1,0 +1,97 @@
+{{ define "paraview" }}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Eclair - ParaView</title>
+    <style>
+        body {
+            background: rgba(102, 102, 102, 0.5);
+        }
+        
+        .formbox {
+            width: 90%;
+            height: 75%;
+            text-align: center;
+            padding: 15px;
+            /*border: 3px solid #0000cc;
+        border-radius: 10px;
+        color: #0000cc;             */
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            background: #fff;
+        }
+    </style>
+    <script>
+        /* Создание нового объекта XMLHttpRequest для общения с Web-сервером */
+        var xhr = false;
+        /* IExplorer */
+        /*@cc_on @*/
+        /*@if (@_jscript_version >= 5)
+        try {
+            xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e) {
+            try {
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (e2) {
+                xmlHttp = false;
+            }
+        }
+        @end @*/
+
+        if (!xhr && typeof XMLHttpRequest != 'undefined') {
+            xhr = new XMLHttpRequest();
+        }
+
+        function updatePage() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                if (xhr.responseText.indexOf('invalid') < 0) { // OK
+                    /* распарсить JSON и заполнить поля */
+                    jso = JSON.parse(xhr.responseText);
+                    console.log(Object.entries(jso)); // Array[][]
+                    document.getElementById("paraTitle").innerText = jso.Header;
+                    document.getElementById("paraText").innerText = jso.Text; //escape(jso.Text) - заменяет пробелы и спецсимволы их цифровыми эквивалентами
+                }
+            }
+        }
+
+        function callServer(vector) {
+            // Открыть соединение с сервером
+            xhr.open("POST", "/paraview/?action=" + escape(vector) /*url*/ , true);
+
+            // Установить функцию для сервера, которая выполнится после его ответа
+            xhr.onreadystatechange = updatePage;
+
+            // Передать запрос
+            xhr.send(null);
+        }
+    </script>
+
+    <body>{{/* . = Paragraph */}} {{ if .}}
+        <div class="formbox">
+            <form action="/paraview/?action=exit" method="POST">
+                <div>
+                    <h3 id="paraTitle">{{.Header}}</h3>
+                </div>
+                <div><textarea id="paraText" cols="120" rows="30" style="width:95%; height:80%" readonly>{{.Text}}</textarea></div>
+                <br>
+                <br><input type="hidden" name="CurCourseId" value="">
+                <br><input type="hidden" name="CurParaId" value=""><br>
+                <button type="button" onclick="callServer('prev');">Назад</button>
+                <button type="button" onclick="callServer('next');">Далее</button>
+                <br><br>
+                <input type="submit" value="Прекратить">
+            </form>
+        </div>
+        {{ else }}
+        <h3>Ошибка вывода курса на экран или курс пуст!</h3>
+        {{ end }}
+    </body>
+
+</html>
+{{ end }}

@@ -1,0 +1,38 @@
+{{ define "authform" }}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Название документа</title>
+    <style>
+      body {
+        background: rgba(102, 102, 102, 0.5);
+      }
+      .formbox {
+        width: 300px;
+        height: 250px;
+        text-align: center;
+        padding: 15px;
+        /*border: 3px solid #0000cc;
+        border-radius: 10px;
+        color: #0000cc;             */
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        background: #fff;
+      }
+    </style>
+<body>
+  <div class="formbox">
+    <form action="/auth/" method="POST">
+	  Имя пользователя:<br><input type="text" name="Uname"><br>
+	  Пароль:<br><input type="password" name="Upass"><br><br>
+	  <input type="submit" value="Вход">
+    </form>
+  </div>
+</body>
+</html>
+{{ end }}

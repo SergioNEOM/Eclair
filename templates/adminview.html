@@ -1,0 +1,82 @@
+{{ define "mainview" }}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Название документа</title>
+    <script>
+    </script>
+    <style>
+      body {
+        background: rgba(102, 102, 102, 0.5);
+      }
+	.content {
+	  display: block;
+	  float: left;
+	  width: 100%;
+
+	}
+	.menu{
+	        width: 300px;
+        	height: 250px;
+	        text-align: center;
+        	padding: 15px;
+        	position: absolute;
+          border: 3px solid #999;
+        	border-radius: 10px;
+	        top: 0;
+        	right: 0;
+	        bottom: 0;
+        	left: 0;
+	        margin: auto;
+        	background: #fff;
+	      }
+	ul {
+	    list-style-type: none;
+	    margin: 0;
+	    padding: 0;
+	    overflow: hidden;
+	    background-color: #777777;
+      border-radius: 10px;
+	}
+	li {
+	    padding: 10px;
+	 /*   float: left;*/
+	}
+	li a {
+	    display: block;
+	    color: white;
+	    text-align: center;
+	    text-decoration: none;
+      border-radius: 5px;
+	}
+	li a:hover {
+	    background-color: #111111;
+	}
+	.taskbody {
+
+	    /*width: 80%;*/
+
+	    display: block;
+	    background-color: #AAF;
+	    margin: 5px;
+	    padding: 5px;
+	    width: 75%;
+	}
+</style>
+<body>
+<div class="content">
+	<div class="content menu">
+		<ul>
+		  <li><a href="#1" onclick="document.getElementById('tarea').value=prompt('111','222')">Конфигурация</li>
+		  <li><a href="/usersview/?sid=12345" >Пользователи</li>
+		  <li></li>
+		  <li><a href="/">Выход</li>
+		</ul>
+	</div>
+	<div>
+	</div>
+</div>
+</body>
+</html>
+{{ end }}

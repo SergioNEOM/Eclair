@@ -1,0 +1,120 @@
+{{ define "usersview" }}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Название документа</title>
+    <script>
+    </script>
+    <style>
+        body {
+            background: rgba(102, 102, 102, 0.5);
+        }
+        
+        header {
+            background: #CCF;
+        }
+        
+        .content {
+            display: block;
+            float: left;
+            width: 100%;
+        }
+        
+        .menu {
+            float: left;
+            display: block;
+            width: 15%;
+            margin: 5px;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #777777;
+        }
+        
+        li {
+            /*   float: left;*/
+        }
+        
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 16px;
+            text-decoration: none;
+        }
+        
+        li a:hover {
+            background-color: #111111;
+        }
+        
+        .taskbody {
+            /*width: 80%;*/
+            display: block;
+            background-color: #1AAAAA;
+            margin: 5px;
+            padding: 5px;
+            width: 75%;
+        }
+        
+        .div_button {
+            display: inline;
+        }
+    </style>
+
+    <body>
+        <header>
+            <div>
+                <h1>Заголовок</h1>
+            </div>
+        </header>
+        <div class="content taskbody"> &nbsp;
+            <div>
+                <div class="moduleHeader">
+                    <h2>Список пользователей</h2>
+                    <div class="context_menu">
+                        <ul>
+                            <li><a href="/adduser/">Добавить</a></li>
+                            <li><a href="/usersview/?action=saveusers">Сохранить список</a></li>
+                        </ul>
+                    </div>
+                    <div class="moduleContent">
+                        {{ if . }}
+                        <table>
+                            <tr>
+                                <th>#</th>
+                                <th>Account</th>
+                                <th>Пользователь</th>
+                                <th>Роль</th>
+                            </tr>
+                            {{ range $index, $element := . }} {{/* common.UsersList */}}
+                            <!--- <span><div class="div_button"><a href="#">...</a></div>{{.Name}} &nbsp; </span><br> -->
+                            <tr columns=7>
+                                <td>{{ $index }}</td>
+                                <td>{{.Account}}</td>
+                                <td>{{.Name}}</td>
+                                <td>{{.Role}}</td>
+                                <td><a href="/usersview/?action=edit&uid={{.Id}}">...</a></td>
+                            </tr>
+                            {{ end }}
+                        </table>
+                        {{ else }} &nbsp;--- нет пользователей --- {{ end }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+        </div>
+        </div>
+        <div>
+        </div>
+        </div>
+    </body>
+
+</html>
+{{ end }}

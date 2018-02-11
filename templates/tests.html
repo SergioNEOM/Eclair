@@ -1,0 +1,16 @@
+{{ define "tests" }}
+<div>
+	<div class="moduleHeader">
+		<h2>Назначенные тесты</h2>
+	        <div class="moduleContent">
+			{{ if . }}
+				{{ range . }}	{{/* []CourseRec */}}
+					{{.Title}} &nbsp; <a href="#">Открыть</a><br>
+				{{ end }}
+			{{ else }}
+				&nbsp;--- нет назначенных тестов ---
+			{{ end }}
+		</div>
+	</div>
+</div>
+{{ end }}
