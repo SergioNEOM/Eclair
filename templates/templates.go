@@ -96,7 +96,7 @@ func GoAddUser(w *http.ResponseWriter) error {
 	return nil
 }
 
-func GoParaView(w *http.ResponseWriter, para *common.Paragraph) error {
+func GoParaView(w *http.ResponseWriter, para *common.ParaView) error {
 	t, err := template.ParseFiles("./templates/paraview.html" /* , header, footer*/)
 	if err != nil {
 		return err

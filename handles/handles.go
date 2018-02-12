@@ -159,13 +159,14 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 			}
 			//todo: начало вывода (или продолжение) курса. Как отловить случайный переход?
 			c := common.ListOfCourses.GetCourse(uid)
-			fmt.Println("ParaView: ListOfCourses:", c)
 			if c != nil {
 				if common.CurrentCourse.LoadFromFile(c.FName) {
-					common.CurrentPara = 0 //начать сначала
+					common.CurrentPara = -1 //начать сначала
 					fmt.Printf("Старт курса id:%s из файла %s\n", uid, c.FName)
 					//пришли первый раз - тогда покажем страницу полностью
-					err = templates.GoParaView(&w, common.CurrentCourse.Para[common.CurrentPara])
+					// err = templates.GoParaView(&w, common.CurrentCourse.Para[common.CurrentPara])
+
+					err = templates.GoParaView(&w, &common.ParaView{ParaCurNum: -1, PrevBut: false, NextBut: true})
 					if err != nil {
 						fmt.Fprintf(w, "ParaView Error: %s", err)
 						log.Fatalf("--- ParaView Error: %s   -----\n", err)

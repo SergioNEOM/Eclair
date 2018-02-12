@@ -76,14 +76,18 @@
         <div class="formbox">
             <form action="/paraview/?action=exit" method="POST">
                 <div>
+                    {{ if eq .ParaCurNum -1 }}
+                    <h3 id="paraTitle">Вводная информация</h3>
+                    {{ else }}
                     <h3 id="paraTitle">{{.Header}}</h3>
+                    {{ end }}
                 </div>
                 <div><textarea id="paraText" cols="120" rows="30" style="width:95%; height:80%" readonly>{{.Text}}</textarea></div>
                 <br>
                 <br><input type="hidden" name="CurCourseId" value="">
                 <br><input type="hidden" name="CurParaId" value=""><br>
-                <button type="button" onclick="callServer('prev');">Назад</button>
-                <button type="button" onclick="callServer('next');">Далее</button>
+                <button type="button" onclick="callServer('prev');" {{ if not .PrevBut }} disabled {{end}}>Назад</button>
+                <button type="button" onclick="callServer('next');"{{ if not .NextBut }} disabled {{end}}>Далее</button>
                 <br><br>
                 <input type="submit" value="Прекратить">
             </form>
