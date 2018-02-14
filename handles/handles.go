@@ -137,6 +137,7 @@ var handleAddUser = func(w http.ResponseWriter, r *http.Request) {
 var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var uid, a string
+	var pview common.ParaView
 	/*
 		1. Показать параграф
 		2. по значению action перейти к пред/след параграфу (если не контрольный вопрос или не крайний параграф)
@@ -161,12 +162,14 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 			c := common.ListOfCourses.GetCourse(uid)
 			if c != nil {
 				if common.CurrentCourse.LoadFromFile(c.FName) {
-					common.CurrentPara = -1 //начать сначала
+					common.CurrentPara = -1 //todo: а если начать не сначала?
 					fmt.Printf("Старт курса id:%s из файла %s\n", uid, c.FName)
 					//пришли первый раз - тогда покажем страницу полностью
 					// err = templates.GoParaView(&w, common.CurrentCourse.Para[common.CurrentPara])
-
-					err = templates.GoParaView(&w, &common.ParaView{ParaCurNum: -1, PrevBut: false, NextBut: true})
+					pview = common.ParaView{ParaCurNum: -1, PrevBut: false, NextBut: true}
+					pview.Header = "Вводная информация"
+					pview.Text = fmt.Sprintf("dfd;flgd;lf\ndfsdd\nЫАЫВАЫВАЫВАЫВАЫВА ыв ыВАЫВАЫ\nfsd")
+					err = templates.GoParaView(&w, &pview)
 					if err != nil {
 						fmt.Fprintf(w, "ParaView Error: %s", err)
 						log.Fatalf("--- ParaView Error: %s   -----\n", err)
@@ -197,20 +200,28 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if a == "next" {
-			fmt.Printf("ParaView CurrPara=%d -- len(Para): %d\n", common.CurrentPara, len(common.CurrentCourse.Para))
-			if common.CurrentPara >= len(common.CurrentCourse.Para)-1 {
+			if common.CurrentPara > len(common.CurrentCourse.Para)-1 {
 				fmt.Println("ParaView: course is finished")
-				//todo: redirect не работает - нужен JSON !!!
-
-				//  КАК ЗАВЕРШИТЬ?? если ждёт JSON
+				//итоговая форма
+				pview = common.ParaView{ParaCurNum: -2, PrevBut: true, NextBut: false}
+				pview.Header = "Итоги"
+				pview.Text = fmt.Sprintf("dfd;dsdsdflgd;lf\ndfsdd\nЫА--------\nЫВАЫВАЫВАЫВАЫВА ыв ыВАЫВАЫ\nfsd")
 
 			} else {
 				common.CurrentPara++
 			}
 		}
-		// маршаллим из структуры Paragraph
-		fmt.Printf("ParaView (2) CurrPara=%d -- (Para): %v\n", common.CurrentPara, common.CurrentCourse.Para[common.CurrentPara])
-		bytes, err := json.Marshal(common.CurrentCourse.Para[common.CurrentPara])
+		//флаги доступности кнопок
+		if common.CurrentPara >= 0 {
+			fmt.Printf("ParaView CurrPara=%d -- len(Para): %d\n", common.CurrentPara, len(common.CurrentCourse.Para))
+			pview.Header = common.CurrentCourse.Para[common.CurrentPara].Header
+			pview.Text = common.CurrentCourse.Para[common.CurrentPara].Text
+			pview.Answer = common.CurrentCourse.Para[common.CurrentPara].Answer
+		}
+		pview.PrevBut = bool(common.CurrentPara > 0)
+		pview.NextBut = bool(common.CurrentPara < (len(common.CurrentCourse.Para) - 1))
+		// маршаллим из структуры ParaView
+		bytes, err := json.Marshal(pview)
 		if err != nil {
 			fmt.Println("ParaView: error on marshalling")
 			return
