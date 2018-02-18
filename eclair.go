@@ -34,8 +34,8 @@ func main() {
 
 	//common.Courses[common.CurrentUser].LoadFromFile("courses.json")
 	common.CurrentCourse.SetHeader("заголовок", "автор", "коммент")
-	common.CurrentCourse.AddPara("Заголовок параграфа 1", "длинный-длинный текст", "")
-	common.CurrentCourse.AddPara("Заголовок параграфа 2", "очень и очень длинный текст", "1")
+	common.CurrentCourse.AddPara("Заголовок параграфа 1", "длинный-длинный текст", "", 0)
+	common.CurrentCourse.AddPara("Заголовок параграфа 2", "очень и очень длинный текст", "1", 0)
 	//common.CurrentCourse.SaveToFile("Course-1.json", 0644)
 
 	fmt.Println("Users[cu]->", common.Users[common.CurrentUser])

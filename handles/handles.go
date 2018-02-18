@@ -147,9 +147,7 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 
 	*/
 	uid = r.URL.Query().Get("uid")
-	//--
 	a = r.URL.Query().Get("action")
-	fmt.Printf("ParaView  handle: METHOD=%s , uid=%s, action=%s\n", r.Method, uid, a)
 	//
 	if r.Method == http.MethodGet {
 		if a == "start" {
@@ -158,28 +156,11 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, "<h1>ParaView Error: empty uid in get request</h1>")
 				return
 			}
-			//todo: начало вывода (или продолжение) курса. Как отловить случайный переход?
-			c := common.ListOfCourses.GetCourse(uid)
-			if c != nil {
-				if common.CurrentCourse.LoadFromFile(c.FName) {
-					common.CurrentPara = -1 //todo: а если начать не сначала?
-					fmt.Printf("Старт курса id:%s из файла %s\n", uid, c.FName)
-					//пришли первый раз - тогда покажем страницу полностью
-					// err = templates.GoParaView(&w, common.CurrentCourse.Para[common.CurrentPara])
-					pview = common.ParaView{ParaCurNum: -1, PrevBut: false, NextBut: true}
-					pview.Header = "Вводная информация"
-					pview.Text = fmt.Sprintf("dfd;flgd;lf\ndfsdd\nЫАЫВАЫВАЫВАЫВАЫВА ыв ыВАЫВАЫ\nfsd")
-					err = templates.GoParaView(&w, &pview)
-					if err != nil {
-						fmt.Fprintf(w, "ParaView Error: %s", err)
-						log.Fatalf("--- ParaView Error: %s   -----\n", err)
-					}
-				} else { // не загрузился из файла
-					fmt.Fprint(w, "ParaView Error: Course is empty or not loaded")
-					fmt.Printf("ParaView: Corse %s  is empty or not loaded\n", uid)
-				}
-			} else {
-				fmt.Printf("ParaView: CoursesList[%s] = nil\n", uid)
+			//todo: начало вывода курса. Как отловить случайный переход?
+			err = templates.GoParaView(&w, common.StartCourse(uid))
+			if err != nil {
+				fmt.Fprintf(w, "ParaView Error: %s", err)
+				log.Fatalf("--- ParaView Error: %s   -----\n", err)
 			}
 		} else {
 			fmt.Fprint(w, "ParaView Error: GET method without action=start")
@@ -241,6 +222,7 @@ func SetHandles() {
 	http.HandleFunc("/", handleRoot)
 	http.HandleFunc("/favicon.ico", handleFavicon)
 	// http.HandleFunc("/img/", HandleImages)
+	//todo: потом сделать параметр в конфиге: в случае проксирующего Веб-сервера тот пусть статику сам отдает
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img")))) // если имя файла не указать, отдаёт список файлов из img !!!
 
 	http.HandleFunc("/auth/", handleAuth)

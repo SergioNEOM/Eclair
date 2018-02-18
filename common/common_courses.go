@@ -6,6 +6,13 @@ import (
 	"sort"
 )
 
+const (
+	ANSWERTypeInt = iota
+	ANSWERTypeString
+	ANSWERTypeRadio
+	ANSWERTypeCheck
+)
+
 /*
  * Курс - упорядоченный(!) набор параграфов ( []Paragraph ) или лекций
  * Параграф - отображаемый элемент, стостоящий из Текста и Ответа на контрольный вопрос (опционально),
@@ -31,13 +38,18 @@ type ParaView struct {
 При запуске программа сканирует каталог курсов и заполняет
 */
 
+type Block struct {
+	Header string
+	Text   string
+}
+
 /*
 Paragraph (экспортируемая структура) - визуальная единица курса
 */
 type Paragraph struct {
-	Header string
-	Text   string
-	Answer string
+	Block
+	AnsType int //ANSWERType const
+	Answer  string
 }
 
 /*
@@ -62,8 +74,8 @@ func (c *Course) SetHeader(title, author, comment string) {
 /*
 AddPara - добавляет один параграф к курсу (операция in-memory, требует последующего сохранения в файл)
 */
-func (c *Course) AddPara(header, text, answer string) {
-	c.Para = append(c.Para, &Paragraph{header, text, answer})
+func (c *Course) AddPara(header, text, answer string, anstype int) {
+	c.Para = append(c.Para, &Paragraph{Block{header, text}, anstype, answer})
 	Flag_CourseChanged = true
 	//todo: log
 }
@@ -108,7 +120,7 @@ CoursesList (экспортируемая структура) - справочн
 */
 type CoursesList []*CourseLocation
 
-// Len, Swap и Less - для сортировки
+// Len, Swap и Less - для реализации интерфейса сортировки
 func (c CoursesList) Len() int {
 	return c.Len()
 }
