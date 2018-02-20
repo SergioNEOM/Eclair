@@ -1,7 +1,6 @@
 package handles
 
 import (
-	"encoding/json"
 	"fmt"
 	"html" //todo: временно
 	"log"
@@ -137,7 +136,7 @@ var handleAddUser = func(w http.ResponseWriter, r *http.Request) {
 var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var uid, a string
-	var pview common.ParaView
+	// var pview common.ParaView
 	/*
 		1. Показать параграф
 		2. по значению action перейти к пред/след параграфу (если не контрольный вопрос или не крайний параграф)
@@ -176,40 +175,16 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if a == "prev" {
-			if common.CurrentPara > 0 {
-				common.CurrentPara--
-			}
+			common.PrevPara()
 		}
 		if a == "next" {
-			if common.CurrentPara > len(common.CurrentCourse.Para)-1 {
-				fmt.Println("ParaView: course is finished")
-				//итоговая форма
-				pview = common.ParaView{ParaCurNum: -2, PrevBut: true, NextBut: false}
-				pview.Header = "Итоги"
-				pview.Text = fmt.Sprintf("dfd;dsdsdflgd;lf\ndfsdd\nЫА--------\nЫВАЫВАЫВАЫВАЫВА ыв ыВАЫВАЫ\nfsd")
+			common.NextPara()
+		}
 
-			} else {
-				common.CurrentPara++
-			}
-		}
-		//флаги доступности кнопок
-		if common.CurrentPara >= 0 {
-			fmt.Printf("ParaView CurrPara=%d -- len(Para): %d\n", common.CurrentPara, len(common.CurrentCourse.Para))
-			pview.Header = common.CurrentCourse.Para[common.CurrentPara].Header
-			pview.Text = common.CurrentCourse.Para[common.CurrentPara].Text
-			pview.Answer = common.CurrentCourse.Para[common.CurrentPara].Answer
-		}
-		pview.PrevBut = bool(common.CurrentPara > 0)
-		pview.NextBut = bool(common.CurrentPara < (len(common.CurrentCourse.Para) - 1))
-		// маршаллим из структуры ParaView
-		bytes, err := json.Marshal(pview)
-		if err != nil {
-			fmt.Println("ParaView: error on marshalling")
-			return
-		}
 		// AJAX-запрос ?  отдать только JSON
 		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprint(w, string(bytes))
+		fmt.Fprint(w, common.FillViewJSON())
+		// fmt.Fprint(w, string(bytes))
 	}
 
 }
