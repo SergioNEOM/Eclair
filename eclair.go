@@ -7,8 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"./common"
-	"./handles"
+	"Eclair/common"
+
+	"Eclair/handles"
 	//	"./users"
 )
 
