@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"sort"
 
-	"Eclair/common"
+	"../common"
 )
 
 //todo: вынести блок структур и интерфейс в common_users

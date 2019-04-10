@@ -7,9 +7,9 @@ import (
 	"net/http"
 	//	"net/url"
 	//
-	"Eclair/common"
+	"../common"
 	//	"../users"
-	"Eclair/templates"
+	"../templates"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
