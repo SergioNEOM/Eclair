@@ -53,7 +53,7 @@ func GenUID(prefix string) string {
 }
 
 //StartCourse - выполняет действия по запуску нового курса
-func StartCourse(uid string) *ParaView {
+/*func StartCourse(uid string) *ParaView {
 	var pview *ParaView
 	c := ListOfCourses.GetCourse(uid)
 	if c != nil {
@@ -72,7 +72,7 @@ func StartCourse(uid string) *ParaView {
 	fmt.Printf("ParaView: Course %s  is empty or not loaded\n", uid)
 	return nil
 }
-
+*/
 //**********
 
 //PrevPara - переход к предыдущему параграфу (если возможно)
@@ -92,7 +92,7 @@ func NextPara() {
 }
 
 //FillViewJSON - возвращает текущий Параграф, оформленный в JSON
-func FillViewJSON() string {
+/*func FillViewJSON() string {
 	var pview ParaView
 	if CurrentPara == -2 {
 		//итоговая форма
@@ -116,3 +116,4 @@ func FillViewJSON() string {
 	}
 	return string(bytes)
 }
+*/

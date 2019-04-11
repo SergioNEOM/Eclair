@@ -156,7 +156,7 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			//todo: начало вывода курса. Как отловить случайный переход?
-			err = templates.GoParaView(&w, common.StartCourse(uid))
+			//err = templates.GoParaView(&w, common.StartCourse(uid))
 			if err != nil {
 				fmt.Fprintf(w, "ParaView Error: %s", err)
 				log.Fatalf("--- ParaView Error: %s   -----\n", err)
@@ -166,6 +166,7 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("ParaView Error: GET method without action=start")
 			return
 		}
+		
 	}
 	if r.Method == http.MethodPost {
 		if a == "exit" {
@@ -183,7 +184,7 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 
 		// AJAX-запрос ?  отдать только JSON
 		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprint(w, common.FillViewJSON())
+	//	fmt.Fprint(w, common.FillViewJSON())
 		// fmt.Fprint(w, string(bytes))
 	}
 

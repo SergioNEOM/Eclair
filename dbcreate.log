@@ -1,0 +1,37 @@
+# описание процесса создания БД
+#
+#  Установить progresql
+#  CREATE USER eclair_boss NOSUPERUSER CREATEDB CREATEROLE WITH ENCRYPTED PASSWORD 'author';
+#  ? Создать групповую роль gr_eclair
+#  ? добавить пользователей eclair, eclair_boss в группу
+#  создать БД eclair_db с владельцем eclair_boss
+#  ? TABLESPACE - ???
+#  подключться к eclair_db:
+# 1) из терминала: $ psql -h 127.0.0.1 -U eclair_boss -d eclair_db 
+# 2) из psql: > \c eclair_db eclair_boss 127.0.0.1     (ввести пароль по запросу)
+# CREATE SCHEMA IF NOT EXISTS eclair_schema AUTHORIZATION eclair_boss;
+# --- создание таблиц ---
+# CREATE USER eclair PASSWORD 'eclair';
+# GRANT CONNECT ON DATABASE eclair_db TO eclair;
+# GRANT USAGE ON SCHEMA eclair_schema TO eclair; 
+# GRANT SELECT ON ALL SEQUENCES IN SCHEMA eclair_schema TO eclair;
+# !!! Но в этом случае eclair сможет только читать данные, но не обновлять/удалять, в т.ч.служебную инф.
+# Продумать распределение прав...
+# GRANT SELECT ON ALL TABLES IN SCHEMA eclair_schema TO eclair;
+#--------------
+# Можно попробовать команду
+#      ALTER USER eclair_boss SET search_path=eclair_schema,public;
+# В этом случае будет необязательно указывать имя схемы в командах при указании таблиц и т.п.,
+# только надо помнить, что это распространится на все команды (например, DROP TABLE)
+#
+# Потом проделать то же самое для пользователя:
+#      ALTER USER eclair SET search_path=eclair_schema; 
+#--------------
+#
+# Подключиться к БД от имени eclair:
+# 1) из терминала: $ psql -h 127.0.0.1 -U eclair -d eclair_db 
+# 2) из psql: > \c eclair_db eclair 127.0.0.1
+#     (ввести пароль по запросу)
+# и проверить работоспособность...
+#
+

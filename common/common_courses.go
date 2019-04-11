@@ -7,10 +7,12 @@ import (
 )
 
 const (
-	ANSWERTypeInt = iota
+	ANSWERTypeNone = iota
+	ANSWERTypeInt
 	ANSWERTypeString
 	ANSWERTypeRadio
-	ANSWERTypeCheck
+	ANSWERTypeCheckSingle
+	ANSWERTypeCheckMulti
 )
 
 /*
@@ -23,11 +25,38 @@ const (
  * В случае с ответом на контрольный вопрос - стрелка "вперед" не отображается до получения правильного ответа
  * Для ввода ответа запланировать поле ввода и кнопку
  *
- *
- * Для передачи данных в шаблоны потребуется структура экранной формы: */
+*/
+/* тело параграфа - собственно блок Текста*/
+
+type ParaBody struct {
+	/*Header string // - в след. версии */
+	ParaText   string
+	// images -  в след.версии
+}
+
+type AnswerString struct {
+	AnsText		string
+	AnsGrade	int				// весовой коэф. (если полож - один из прав.ответ, отриц - неправ.)
+}
+
+/*
+Paragraph (экспортируемая структура) - визуальная единица курса
+*/
+type Paragraph struct {
+	ParaID	int
+	ParaCurNum int	 /* № параграфа в курсе */
+	ParaBody
+	ParaAns	[]AnswerString
+}
+
+type ParagraphList struct {
+	CourseID int
+	ParaList []int
+}
+
+ /* Для передачи данных в шаблоны потребуется структура экранной формы: */
 type ParaView struct {
 	Paragraph      /* унаследовать поля	*/
-	ParaCurNum int /* № параграфа или -1 для начала */
 	PrevBut    bool
 	NextBut    bool
 }
@@ -44,14 +73,12 @@ type Block struct {
 }
 
 /*
-Paragraph (экспортируемая структура) - визуальная единица курса
-*/
 type Paragraph struct {
 	Block
 	AnsType int //ANSWERType const
 	Answer  string
 }
-
+*/
 /*
 Course (экспортируемая структура) - представление курса в памяти, подгружаемое/выгружаемое из/в файл(а)
 */
@@ -74,11 +101,12 @@ func (c *Course) SetHeader(title, author, comment string) {
 /*
 AddPara - добавляет один параграф к курсу (операция in-memory, требует последующего сохранения в файл)
 */
-func (c *Course) AddPara(header, text, answer string, anstype int) {
+/*func (c *Course) AddPara(header, text, answer string, anstype int) {
 	c.Para = append(c.Para, &Paragraph{Block{header, text}, anstype, answer})
 	Flag_CourseChanged = true
 	//todo: log
 }
+*/
 
 /*
 LoadFromFile - загружает курс из файла в память (в подготовленную переменную)

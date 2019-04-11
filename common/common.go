@@ -11,11 +11,11 @@ package common
 const (
 	ROLE_Student = iota
 	ROLE_Teacher
-	ROLE_Coucher
+	ROLE_Coacher
 	ROLE_Admin
 )
 
-var RolesNames = map[int]string{ROLE_Student: "Студент", ROLE_Teacher: "Преподаватель", ROLE_Coucher: "Модератор", ROLE_Admin: "Администратор"}
+var RolesNames = map[int]string{ROLE_Student: "Студент", ROLE_Teacher: "Преподаватель", ROLE_Coacher: "Методист", ROLE_Admin: "Администратор"}
 
 const APP_NAME = "Eclair 1.0"
 const APP_PREFIX = "E1"
