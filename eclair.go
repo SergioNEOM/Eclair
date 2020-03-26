@@ -1,17 +1,16 @@
 package main
 
 import (
-	/*"fmt"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+  //"github.com/SergioNEOM/Eclair/models"
+  "github.com/SergioNEOM/Eclair/common"
+  "github.com/SergioNEOM/Eclair/handles"
 
-	"./common"
-
-	"./handles"
-	*/
-	"./dbase"
+	//"./dbase"
 	//	"./users"
 	//----------
 	//"database/sql"
@@ -24,9 +23,9 @@ import (
 func main() {
 
 //
-dbase.Db_test1()
+//dbase.Db_test1()
 //
-/*
+
 	// 1. открыть конфиг
 	// 2. открыть Users (в памяти хранить или по необходимости открывать файл ?)
 	common.MainConf.SetDefaultConf()
@@ -48,8 +47,8 @@ dbase.Db_test1()
 
 	//common.Courses[common.CurrentUser].LoadFromFile("courses.json")
 	common.CurrentCourse.SetHeader("заголовок", "автор", "коммент")
-	common.CurrentCourse.AddPara("Заголовок параграфа 1", "длинный-длинный текст", "", 0)
-	common.CurrentCourse.AddPara("Заголовок параграфа 2", "очень и очень длинный текст", "1", 0)
+//	common.CurrentCourse.AddPara("Заголовок параграфа 1", "длинный-длинный текст", "", 0)
+//	common.CurrentCourse.AddPara("Заголовок параграфа 2", "очень и очень длинный текст", "1", 0)
 	//common.CurrentCourse.SaveToFile("Course-1.json", 0644)
 
 	fmt.Println("Users[cu]->", common.Users[common.CurrentUser])
@@ -72,6 +71,6 @@ dbase.Db_test1()
 	fmt.Printf("Web server was started on %s...\n\t\t To stop press Ctrl-C\n", common.MainConf.Port)
 
 	log.Fatal(http.ListenAndServe(common.MainConf.Port, nil))
-*/
+
 
 }

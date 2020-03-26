@@ -7,9 +7,9 @@ import (
 	"net/http"
 	//	"net/url"
 	//
-	"../common"
+	"github.com/SergioNEOM/Eclair/common"
 	//	"../users"
-	"../templates"
+	"github.com/SergioNEOM/Eclair/templates"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
@@ -56,7 +56,8 @@ func handleAuth(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, href, http.StatusTemporaryRedirect /*307*/)
 		}
 	}
-
+	// ветка else т.к. выше был редирект
+	// например, r.Method == GET
 	err := templates.GoAuthorize(&w)
 	if err != nil {
 		fmt.Fprintf(w, "Error: %s", err)
@@ -166,7 +167,7 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("ParaView Error: GET method without action=start")
 			return
 		}
-		
+
 	}
 	if r.Method == http.MethodPost {
 		if a == "exit" {
