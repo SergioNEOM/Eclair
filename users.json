@@ -1,26 +1,50 @@
 {
- "U3984EA42-1515861346": {
-  "Account": "789",
-  "Password": "D5A06AB0",
-  "Name": "-------а",
-  "Role": 0
- },
- "U6FB57CB4-1515861346": {
+ "U598837EB-1516216311": {
   "Account": "456",
   "Password": "2D640152",
   "Name": "dfgdfgdfбла-бла-бла",
-  "Role": 0
+  "Role": 0,
+  "Plane": null
  },
- "U9139CADE-1515861346": {
+ "U68725ABB-1516216311": {
+  "Account": "789",
+  "Password": "D5A06AB0",
+  "Name": "-------а",
+  "Role": 0,
+  "Plane": null
+ },
+ "U8AEA502B-1516216311": {
   "Account": "admin",
   "Password": "880E0D76",
   "Name": "admin-admin",
-  "Role": 3
+  "Role": 3,
+  "Plane": null
  },
- "U9787D622-1515861346": {
+ "UE555BF06-1516216311": {
   "Account": "123",
   "Password": "B1A8C371",
   "Name": "бла-бла-бла",
-  "Role": 0
+  "Role": 0,
+  "Plane": {
+   "Courses": [
+    {
+     "Title": "Курс 123456",
+     "CourseLink": "CL9A59517B-1585316311",
+     "MaxAttempts": 0,
+     "Summary": null,
+     "Closed": false,
+     "Moderator": ""
+    },
+    {
+     "Title": "Курс 987654---###",
+     "CourseLink": "CLFB7B4EDD-1585316311",
+     "MaxAttempts": 0,
+     "Summary": null,
+     "Closed": false,
+     "Moderator": ""
+    }
+   ],
+   "Tests": []
+  }
  }
 }

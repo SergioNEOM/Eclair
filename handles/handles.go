@@ -5,6 +5,7 @@ import (
 	"html" //todo: временно
 	"log"
 	"net/http"
+
 	//	"net/url"
 	//
 	"github.com/SergioNEOM/Eclair/common"
@@ -185,7 +186,7 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 
 		// AJAX-запрос ?  отдать только JSON
 		w.Header().Set("Content-Type", "application/json")
-	//	fmt.Fprint(w, common.FillViewJSON())
+		//	fmt.Fprint(w, common.FillViewJSON())
 		// fmt.Fprint(w, string(bytes))
 	}
 
@@ -205,7 +206,7 @@ func SetHandles() {
 	http.HandleFunc("/auth/", handleAuth)
 	http.HandleFunc("/studentview/", handleStudentView)
 	http.HandleFunc("/usersview/", handleUsersView)
-	http.HandleFunc("/adduser/", handleAddUser)
+	http.HandleFunc("/adduser/", CheckToken(handleAddUser))
 	http.HandleFunc("/paraview/", handleParaView)
 
 	//todo: !!! убрать потом /src/
