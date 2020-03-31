@@ -13,6 +13,17 @@ import (
 	"github.com/SergioNEOM/Eclair/templates"
 )
 
+const COOKIE_NAME = "Eclair-+-Token"
+
+func GetCookieValue(r *http.Request) string {
+	// проверяем, был ли выдан токен (и записан в куки)
+	c, err := r.Cookie(COOKIE_NAME)
+	if err != nil {
+		return ""
+	}
+	return c.Value
+}
+
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<html><body>Eclair root<br><br><a href='/auth'>Вход</a></body><html>")
 }
@@ -118,8 +129,18 @@ var handleUsersView = func(w http.ResponseWriter, r *http.Request) {
 
 var handleAddUser = func(w http.ResponseWriter, r *http.Request) {
 	var err error
+
 	if r.Method == "POST" {
 		r.ParseForm()
+		// получли данные формы, надо дальше смотреть...
+
+		//todo: обработать ошибку ?
+		err := CheckToken(GetCookieValue(r))
+		if err != nil {
+			templates.GoErrorView(err.Error(), &w)
+			return
+		}
+
 		common.Users.AddUser(r.PostFormValue("Ulogin"), r.PostFormValue("Upass"), r.PostFormValue("Uname"), common.ROLE_Student)
 		http.Redirect(w, r, "/usersview/", http.StatusTemporaryRedirect /*307*/)
 	}
@@ -206,7 +227,7 @@ func SetHandles() {
 	http.HandleFunc("/auth/", handleAuth)
 	http.HandleFunc("/studentview/", handleStudentView)
 	http.HandleFunc("/usersview/", handleUsersView)
-	http.HandleFunc("/adduser/", CheckToken(handleAddUser))
+	http.HandleFunc("/adduser/", handleAddUser)
 	http.HandleFunc("/paraview/", handleParaView)
 
 	//todo: !!! убрать потом /src/

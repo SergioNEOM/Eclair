@@ -50,9 +50,7 @@ func GoAuthorize(w *http.ResponseWriter) error {
 	return nil
 }
 
-/*
-GoStudentView - отобразить экран для студента
-*/
+// GoStudentView  отобразить экран для студента
 func GoStudentView(w *http.ResponseWriter) error {
 	t, err := template.ParseFiles("./templates/studentview.html" /* , header, footer*/)
 	if err != nil {
@@ -106,4 +104,13 @@ func GoParaView(w *http.ResponseWriter, para *common.ParaView) error {
 		return err
 	}
 	return nil
+}
+
+// GoErrorView  отобразить экран ошибки
+func GoErrorView(errMes string, w *http.ResponseWriter) {
+	t, _ := template.ParseFiles("./templates/error.html")
+
+	_ = t.ExecuteTemplate(*w, "error", errMes)
+
+	return
 }
