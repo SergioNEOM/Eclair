@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Название документа</title>
+    <title>Eclair - admin - usersview</title>
     <script>
     </script>
     <style>
@@ -79,8 +79,8 @@
                     <h2>Список пользователей</h2>
                     <div class="context_menu">
                         <ul>
-                            <li><a href="/adduser/">Добавить</a></li>
-                            <li><a href="/usersview/?action=saveusers">Сохранить список</a></li>
+                            <li><a href="/admin/adduser/">Добавить</a></li>
+                            <li><a href="/admin/usersview/?action=saveusers">Экспорт списка в JSON</a></li>
                         </ul>
                     </div>
                     <div class="moduleContent">
@@ -99,7 +99,7 @@
                                 <td>{{.Account}}</td>
                                 <td>{{.Name}}</td>
                                 <td>{{.Role}}</td>
-                                <td><a href="/usersview/?action=edit&uid={{.Id}}">...</a></td>
+                                <td><a href="/admin/?action=edit&uid={{.Id}}">...</a></td>
                             </tr>
                             {{ end }}
                         </table>

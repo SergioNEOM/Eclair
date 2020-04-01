@@ -15,6 +15,38 @@ import (
 
 const COOKIE_NAME = "Eclair-+-Token"
 
+//
+//
+
+// SetHandles устанавливает все обработчики запросов к Web-серверу, вызывается из main()
+//
+func SetHandles() {
+
+	http.HandleFunc("/", handleRoot)
+	http.HandleFunc("/favicon.ico", handleFavicon)
+	// http.HandleFunc("/img/", HandleImages)
+	//todo: потом сделать параметр в конфиге: в случае проксирующего Веб-сервера тот пусть статику сам отдает
+	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img")))) // если имя файла не указать, отдаёт список файлов из img !!!
+	//
+	http.HandleFunc("/auth/", handleAuth)
+	// студенты
+	http.HandleFunc("/studentview/", handleStudentView)
+
+	http.HandleFunc("/paraview/", handleParaView)
+
+	// для администраторов:
+	http.HandleFunc("/admin/", handleUsersView) // users list
+	http.HandleFunc("/admin/adduser/", handleAddUser)
+	//http.HandleFunc("/admin/edituser/", handleEditUser)
+	//http.HandleFunc("/admin/deluser/", handleDelUser)
+
+	//todo: !!! убрать потом /src/
+	http.HandleFunc("/src/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, %q! \n %s", html.EscapeString(r.URL.Path), r.Method)
+	})
+
+}
+
 func GetCookieValue(r *http.Request) string {
 	// проверяем, был ли выдан токен (и записан в куки)
 	c, err := r.Cookie(COOKIE_NAME)
@@ -54,7 +86,7 @@ func handleAuth(w http.ResponseWriter, r *http.Request) {
 			case common.ROLE_Teacher:
 				href = "/teacherview/"
 			case common.ROLE_Admin:
-				href = "/usersview/" //	"/adminview/"
+				href = "/admin/" //	"/adminview/"
 			default:
 				href = "/"
 			}
@@ -105,7 +137,7 @@ var handleStudentView = func(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
- *
+ * admin - view users list
  */
 var handleUsersView = func(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("action") == "saveusers" {
@@ -142,7 +174,8 @@ var handleAddUser = func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		common.Users.AddUser(r.PostFormValue("Ulogin"), r.PostFormValue("Upass"), r.PostFormValue("Uname"), common.ROLE_Student)
-		http.Redirect(w, r, "/usersview/", http.StatusTemporaryRedirect /*307*/)
+		http.Redirect(w, r, "/admin/", http.StatusTemporaryRedirect /*307*/)
+		// редирект на корень своей роли "/admin"
 	}
 
 	//	if r.Method=="GET" { ??? templates.ParseFiles("adduser.html")
@@ -210,29 +243,5 @@ var handleParaView = func(w http.ResponseWriter, r *http.Request) {
 		//	fmt.Fprint(w, common.FillViewJSON())
 		// fmt.Fprint(w, string(bytes))
 	}
-
-}
-
-/*
-SetHandles устанавливает все обработчики запросов к Web-серверу, вызывается из main()
-*/
-func SetHandles() {
-
-	http.HandleFunc("/", handleRoot)
-	http.HandleFunc("/favicon.ico", handleFavicon)
-	// http.HandleFunc("/img/", HandleImages)
-	//todo: потом сделать параметр в конфиге: в случае проксирующего Веб-сервера тот пусть статику сам отдает
-	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img")))) // если имя файла не указать, отдаёт список файлов из img !!!
-
-	http.HandleFunc("/auth/", handleAuth)
-	http.HandleFunc("/studentview/", handleStudentView)
-	http.HandleFunc("/usersview/", handleUsersView)
-	http.HandleFunc("/adduser/", handleAddUser)
-	http.HandleFunc("/paraview/", handleParaView)
-
-	//todo: !!! убрать потом /src/
-	http.HandleFunc("/src/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q! \n %s", html.EscapeString(r.URL.Path), r.Method)
-	})
 
 }
