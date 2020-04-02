@@ -7,11 +7,11 @@ import (
 
 type User struct {
 	gorm.Model
-	Name  string `gorm:"type:varchar(30)"`
-	Login string `gorm:"type:varchar(30);index:logins_idx;unique_index"`
-	Pass  string `gorm:"type:varchar(30)"`
-	Token []byte `gorm:"type:varchar(130)"`
-	Role  int
+	Name         string `gorm:"type:varchar(30)"`
+	Login        string `gorm:"type:varchar(30);index:logins_idx;unique_index"`
+	Pass         string `gorm:"type:varchar(30)"`
+	RefreshToken string `gorm:"type:varchar(230)"`
+	Role         int
 }
 
 type Users []User

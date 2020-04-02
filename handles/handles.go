@@ -14,6 +14,7 @@ import (
 )
 
 const COOKIE_NAME = "Eclair-+-Token"
+const refreshJWTPath = "/refresh/"
 
 //
 //
@@ -29,6 +30,9 @@ func SetHandles() {
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img")))) // если имя файла не указать, отдаёт список файлов из img !!!
 	//
 	http.HandleFunc("/auth/", handleAuth)
+	// перевыпуск токенов
+	http.HandleFunc(refreshJWTPath, handleMakeNewJWT)
+
 	// студенты
 	http.HandleFunc("/studentview/", handleStudentView)
 
@@ -47,13 +51,18 @@ func SetHandles() {
 
 }
 
-func GetCookieValue(r *http.Request) string {
+//
+func getCookieValue(r *http.Request) string {
 	// проверяем, был ли выдан токен (и записан в куки)
 	c, err := r.Cookie(COOKIE_NAME)
 	if err != nil {
 		return ""
 	}
 	return c.Value
+}
+
+func handleMakeNewJWT(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<html><body>Eclair token refreshing<br><br><a href='/auth'>Вход</a></body><html>")
 }
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
@@ -140,6 +149,7 @@ var handleStudentView = func(w http.ResponseWriter, r *http.Request) {
  * admin - view users list
  */
 var handleUsersView = func(w http.ResponseWriter, r *http.Request) {
+	CheckJWToken(w, r)
 	if r.URL.Query().Get("action") == "saveusers" {
 		_ = common.Users.SaveToFile(common.USERS_FILE, 0644)
 		//todo: обработать случай ошибки сохранения
@@ -167,11 +177,7 @@ var handleAddUser = func(w http.ResponseWriter, r *http.Request) {
 		// получли данные формы, надо дальше смотреть...
 
 		//todo: обработать ошибку ?
-		err := CheckToken(GetCookieValue(r))
-		if err != nil {
-			templates.GoErrorView(err.Error(), &w)
-			return
-		}
+		CheckJWToken(w, r)
 
 		common.Users.AddUser(r.PostFormValue("Ulogin"), r.PostFormValue("Upass"), r.PostFormValue("Uname"), common.ROLE_Student)
 		http.Redirect(w, r, "/admin/", http.StatusTemporaryRedirect /*307*/)
