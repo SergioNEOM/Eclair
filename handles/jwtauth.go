@@ -25,8 +25,8 @@ func CheckJWToken(w http.ResponseWriter, r *http.Request) {
 	tokenStr := getCookieValue(r)
 	if tokenStr == "" {
 		log.Printf("Request %v - Token not found in cookie. Go to authentification", r.RequestURI)
-		ююю
-		http.Redirect(w, r, "/auth", 307 /*401*/)
+		/////
+		http.Redirect(w, r, "/", 307 /*401*/)
 		return
 	}
 	// 2. Получить в БД refreshToken, чтобы на нём проверить accessToken.
@@ -34,11 +34,11 @@ func CheckJWToken(w http.ResponseWriter, r *http.Request) {
 	secretKey := SECRET //todo: потом заменить функцией получения из БД
 	//
 	t, err := jwt.ParseWithClaims(tokenStr, &JWTCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return secretKey, nil
+		return []byte(secretKey), nil
 	})
 	if err != nil {
-		log.Println("Token parse error. Go to authentification")
-		http.Redirect(w, r, "/auth", 401)
+		log.Printf("Token parse error. Go to authentification --- %v\n", err)
+		http.Redirect(w, r, "/", 401)
 		return
 	}
 
@@ -46,7 +46,7 @@ func CheckJWToken(w http.ResponseWriter, r *http.Request) {
 	claims, ok := t.Claims.(*JWTCustomClaims)
 	if !(ok && t.Valid) {
 		log.Println("Token parse error - claims not recognized. Go to authentification")
-		http.Redirect(w, r, "/auth", 401)
+		http.Redirect(w, r, "/", 401)
 		return
 	}
 

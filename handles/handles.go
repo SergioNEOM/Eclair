@@ -55,6 +55,7 @@ func SetHandles() {
 func getCookieValue(r *http.Request) string {
 	// проверяем, был ли выдан токен (и записан в куки)
 	c, err := r.Cookie(COOKIE_NAME)
+	//	log.Printf("%v %v\n", COOKIE_NAME, c)
 	if err != nil {
 		return ""
 	}
@@ -89,6 +90,7 @@ func handleAuth(w http.ResponseWriter, r *http.Request) {
 		if key != "" {
 			common.CurrentUser = key
 			fmt.Printf("Current user: %s - Role:%d\n", key, common.Users[key].Role)
+			fmt.Println("token checked?")
 			switch common.Users[key].Role {
 			case common.ROLE_Student:
 				href = "/studentview/"
